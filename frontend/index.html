@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Diagnostic Réseau</title>
+</head>
+<body>
+  <h1>Outil de diagnostic réseau</h1>
+  <input type="text" id="host" placeholder="Entrez une adresse (ex: google.com)">
+  <button onclick="runTest()">Tester</button>
+
+  <pre id="result"></pre>
+
+  <button onclick="showHistory()">Voir l'historique</button>
+
+  <script>
+    async function runTest() {
+        const host = document.getElementById("host").value;
+        const res = await fetch(`/api/diagnostic?host=${host}`);
+        const data = await res.json();
+        document.getElementById("result").innerText =
+            `PING:\n${data.ping}\n\nNSLOOKUP:\n${data.nslookup}\n\nTRACEROUTE:\n${data.traceroute}`;
+    }
+
+    async function showHistory() {
+        const res = await fetch("/api/history");
+        const data = await res.json();
+        let output = "Historique :\n\n";
+        data.forEach((item, i) => {
+            output += `${i+1}. ${item.host}\nPING:\n${item.ping}\n\n`;
+        });
+        document.getElementById("result").innerText = output;
+    }
+  </script>
+</body>
+</html>

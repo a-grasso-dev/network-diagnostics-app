@@ -1,0 +1,27 @@
+services:
+  backend:
+    build: ./backend
+    container_name: backend
+    depends_on:
+      - redis
+    networks:
+      - net
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    networks:
+      - net
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - net
+
+networks:
+  net:
