@@ -2,35 +2,28 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Diagnostic Réseau</title>
+  <title>Outil de Diagnostic Réseau</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-  <h1>Outil de diagnostic réseau</h1>
-  <input type="text" id="host" placeholder="Entrez une adresse (ex: google.com)">
-  <button onclick="runTest()">Tester</button>
+<body class="bg-gray-100 text-gray-900 font-sans">
 
-  <pre id="result"></pre>
+  <div class="max-w-3xl mx-auto p-6">
+    <h1 class="text-3xl font-bold text-center text-blue-600 mb-6">Diagnostic Réseau</h1>
 
-  <button onclick="showHistory()">Voir l'historique</button>
+    <div class="bg-white p-6 rounded shadow-md">
+      <label for="host" class="block text-sm font-medium text-gray-700 mb-2">Adresse IP ou nom de domaine :</label>
+      <input type="text" id="host" class="w-full border p-2 rounded mb-4" placeholder="ex: google.com">
 
-  <script>
-    async function runTest() {
-        const host = document.getElementById("host").value;
-        const res = await fetch(`/api/diagnostic?host=${host}`);
-        const data = await res.json();
-        document.getElementById("result").innerText =
-            `PING:\n${data.ping}\n\nNSLOOKUP:\n${data.nslookup}\n\nTRACEROUTE:\n${data.traceroute}`;
-    }
+      <div class="flex gap-4">
+        <button onclick="runTest()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow">Tester</button>
+        <button onclick="showHistory()" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded shadow">Voir l'historique</button>
+      </div>
+    </div>
 
-    async function showHistory() {
-        const res = await fetch("/api/history");
-        const data = await res.json();
-        let output = "Historique :\n\n";
-        data.forEach((item, i) => {
-            output += `${i+1}. ${item.host}\nPING:\n${item.ping}\n\n`;
-        });
-        document.getElementById("result").innerText = output;
-    }
-  </script>
+    <div id="result" class="whitespace-pre-wrap bg-white mt-6 p-6 rounded shadow text-sm"></div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
